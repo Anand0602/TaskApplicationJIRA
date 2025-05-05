@@ -20,12 +20,11 @@ This application aims to provide users with a platform to manage their tasks eff
 * **Backend:** .NET MVC (Specific .NET framework version to be confirmed).
 * **Frontend:** Angular (Specific Angular version to be confirmed).
 * **Database:** MS SQL Server.
-* **Other (Potential/Planned):** Docker (based on existing configuration files).
+* **Other (Potential/Planned):** Docker .
 
 ## Getting Started (Placeholder - Code Missing)
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.  **(Currently, the core application code is not available in the repository, so these steps are placeholders.)**
-
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.  
 1. **Clone the repository:**  `git clone https://github.com/Anand0602/TaskApplicationJIRA.git`
 2. **Database Setup:** Create a MS SQL Server database and configure the connection string in the application's configuration files.
 3. **Backend Setup:**  Restore NuGet packages, build the .NET project, and run the backend server.
@@ -40,7 +39,7 @@ Contributions are welcome! Please contact the project maintainers for informatio
 
 ## License
 
-(To be added)  Specify the appropriate license for your project (e.g., MIT, Apache 2.0, etc.).
+
 
 
 ## Contact
