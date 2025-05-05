@@ -1,0 +1,334 @@
+﻿@* @{ *@
+@*     ViewData["Title"] = "Admin Dashboard"; *@
+@* } *@
+
+@* <div class="container my-4"> *@
+@*     <!-- Button Row --> *@
+@*     <div class="text-center mb-5"> *@
+@*         <h2 class="mb-4">Admin Control Panel</h2> *@
+@*         <div class="d-flex justify-content-center flex-wrap gap-3"> *@
+@*             <a class="btn btn-outline-primary" asp-controller="Category" asp-action="Create">+ Category</a> *@
+@*             <a class="btn btn-outline-secondary" asp-controller="Priority" asp-action="Create">+ Priority</a> *@
+@*             <a class="btn btn-outline-success" asp-controller="Task" asp-action="Create">+ Task</a> *@
+@*             <a class="btn btn-outline-info" asp-controller="User" asp-action="Create">+ User</a> *@
+@*         </div> *@
+@*     </div> *@
+
+@*     <!-- Main Grid --> *@
+@*     <div class="row"> *@
+@*         <!-- Users Column --> *@
+@*         <div class="col-md-6 mb-4"> *@
+@*             <div class="card shadow-sm"> *@
+@*                 <div class="card-header bg-primary text-white fw-bold"> *@
+@*                     All Users *@
+@*                 </div> *@
+@*                 <div class="card-body p-0"> *@
+@*                     <div class="table-responsive"> *@
+@*                         <table class="table table-hover table-striped mb-0"> *@
+@*                             <thead class="table-dark"> *@
+@*                                 <tr> *@
+@*                                     <th>Username</th> *@
+@*                                     <th>Email</th> *@
+@*                                     <th>Role</th> *@
+@*                                     <th>Actions</th> *@
+@*                                 </tr> *@
+@*                             </thead> *@
+@*                             <tbody> *@
+@*                                 @foreach (var user in Model.Users) *@
+@*                                 { *@
+@*                                     <tr> *@
+@*                                         <td>@user.Username</td> *@
+@*                                         <td>@user.Email</td> *@
+@*                                         <td>@user.Role</td> *@
+@*                                         <td> *@
+@*                                             <div class="btn-group" role="group"> *@
+@*                                                 <a class="btn btn-sm btn-primary" asp-controller="User" asp-action="Edit" asp-route-id="@user.UserId">Edit</a> *@
+@*                                                 <a class="btn btn-sm btn-danger" asp-controller="User" asp-action="Delete" asp-route-id="@user.UserId">Delete</a> *@
+@*                                             </div> *@
+@*                                         </td> *@
+@*                                     </tr> *@
+@*                                 } *@
+@*                             </tbody> *@
+@*                         </table> *@
+@*                     </div> *@
+@*                 </div> *@
+@*             </div> *@
+@*         </div> *@
+
+@*         <!-- Tasks Column --> *@
+@*         <div class="col-md-6 mb-4"> *@
+@*             <div class="card shadow-sm"> *@
+@*                 <div class="card-header bg-success text-white fw-bold"> *@
+@*                     All Tasks *@
+@*                 </div> *@
+@*                 <div class="card-body p-0"> *@
+@*                     <div class="table-responsive"> *@
+@*                         <table class="table table-hover table-striped mb-0"> *@
+@*                             <thead class="table-dark"> *@
+@*                                 <tr> *@
+@*                                     <th>Task ID</th> *@
+@*                                     <th>Title</th> *@
+@*                                     <th>Description</th> *@
+@*                                     <th>Category</th> *@
+@*                                     <th>Status</th> *@
+@*                                     <th>Actions</th> *@
+@*                                 </tr> *@
+@*                             </thead> *@
+@*                             <tbody> *@
+@*                                 @foreach (var task in Model.Tasks) *@
+@*                                 { *@
+@*                                     <tr> *@
+@*                                         <td>@task.Id</td> *@
+@*                                         <td>@task.Title</td> *@
+@*                                         <td>@task.Description</td> *@
+@*                                         <td>@task.Category?.Name</td> *@
+@*                                         <td>@task.Status</td> *@
+@*                                         <td> *@
+@*                                             <div class="btn-group" role="group"> *@
+@*                                                 <a class="btn btn-sm btn-primary" asp-controller="Task" asp-action="Edit" asp-route-id="@task.Id">Edit</a> *@
+@*                                                 <a class="btn btn-sm btn-danger" asp-controller="Task" asp-action="Delete" asp-route-id="@task.Id">Delete</a> *@
+@*                                             </div> *@
+@*                                         </td> *@
+@*                                     </tr> *@
+@*                                 } *@
+@*                             </tbody> *@
+@*                         </table> *@
+@*                     </div> *@
+@*                 </div> *@
+@*             </div> *@
+@*         </div> *@
+
+@*         <!-- Categories Column --> *@
+@*         <div class="col-md-6 mb-4"> *@
+@*             <div class="card shadow-sm"> *@
+@*                 <div class="card-header bg-warning text-dark fw-bold"> *@
+@*                     All Categories *@
+@*                 </div> *@
+@*                 <div class="card-body p-0"> *@
+@*                     <div class="table-responsive"> *@
+@*                         <table class="table table-hover table-striped mb-0"> *@
+@*                             <thead class="table-dark"> *@
+@*                                 <tr> *@
+@*                                     <th>Category ID</th> *@
+@*                                     <th>Name</th> *@
+@*                                     <th>Actions</th> *@
+@*                                 </tr> *@
+@*                             </thead> *@
+@*                             <tbody> *@
+@*                                 @foreach (var category in Model.Categories) *@
+@*                                 { *@
+@*                                     <tr> *@
+@*                                         <td>@category.CategoryId</td> *@
+@*                                         <td>@category.Name</td> *@
+@*                                         <td> *@
+@*                                             <div class="btn-group" role="group"> *@
+@*                                                 <a class="btn btn-sm btn-primary" asp-controller="Category" asp-action="Edit" asp-route-id="@category.CategoryId">Edit</a> *@
+@*                                                 <a class="btn btn-sm btn-danger" asp-controller="Category" asp-action="Delete" asp-route-id="@category.CategoryId">Delete</a> *@
+@*                                             </div> *@
+@*                                         </td> *@
+@*                                     </tr> *@
+@*                                 } *@
+@*                             </tbody> *@
+@*                         </table> *@
+@*                     </div> *@
+@*                 </div> *@
+@*             </div> *@
+@*         </div> *@
+
+@*         <!-- Priorities Column --> *@
+@*         <div class="col-md-6 mb-4"> *@
+@*             <div class="card shadow-sm"> *@
+@*                 <div class="card-header bg-danger text-white fw-bold"> *@
+@*                     All Priorities *@
+@*                 </div> *@
+@*                 <div class="card-body p-0"> *@
+@*                     <div class="table-responsive"> *@
+@*                         <table class="table table-hover table-striped mb-0"> *@
+@*                             <thead class="table-dark"> *@
+@*                                 <tr> *@
+@*                                     <th>Priority ID</th> *@
+@*                                     <th>Level</th> *@
+                                    
+@*                                 </tr> *@
+@*                             </thead> *@
+@*                             <tbody> *@
+@*                                 @foreach (var priority in Model.Priorities) *@
+@*                                 { *@
+@*                                     <tr> *@
+@*                                         <td>@priority.PriorityId</td> *@
+@*                                         <td>@priority.Level</td> *@
+                                       
+@*                                     </tr> *@
+@*                                 } *@
+@*                             </tbody> *@
+@*                         </table> *@
+@*                     </div> *@
+@*                 </div> *@
+@*             </div> *@
+@*         </div> *@
+@*     </div> *@
+@* </div> *@
+
+
+@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<div class="container my-5">
+    <!-- Header -->
+    <div class="text-center mb-5">
+        <h1 class="fw-bold text-primary">Admin Control Panel</h1>
+        <p class="lead text-muted">Manage users, tasks, categories, and priorities.</p>
+
+        <div class="d-flex justify-content-center flex-wrap gap-3 mt-4">
+            <a class="btn btn-outline-primary btn-lg px-4" asp-controller="Category" asp-action="Create">+ Category</a>
+            <a class="btn btn-outline-secondary btn-lg px-4" asp-controller="Priority" asp-action="Create">+ Priority</a>
+            <a class="btn btn-outline-success btn-lg px-4" asp-controller="Task" asp-action="Create">+ Task</a>
+            <a class="btn btn-outline-info btn-lg px-4" asp-controller="User" asp-action="Create">+ User</a>
+        </div>
+    </div>
+
+    <!-- Grid Layout -->
+    <div class="row g-4">
+        <!-- Users -->
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-primary text-white fw-semibold">All Users</div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Username</th>
+                                    <th>Email</th>
+                                    <th>Role</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var user in Model.Users)
+                                {
+                                    <tr>
+                                        <td>@user.Username</td>
+                                        <td>@user.Email</td>
+                                        <td>@user.Role</td>
+                                        <td>
+                                            <div class="btn-group btn-group-sm">
+                                                <a class="btn btn-outline-primary" asp-controller="User" asp-action="Edit" asp-route-id="@user.UserId">Edit</a>
+                                                <a class="btn btn-outline-danger" asp-controller="User" asp-action="Delete" asp-route-id="@user.UserId">Delete</a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tasks -->
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-success text-white fw-semibold">All Tasks</div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Task ID</th>
+                                    <th>Title</th>
+                                    <th>Description</th>
+                                    <th>Category</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var task in Model.Tasks)
+                                {
+                                    <tr>
+                                        <td>@task.Id</td>
+                                        <td>@task.Title</td>
+                                        <td>@task.Description</td>
+                                        <td>@task.Category?.Name</td>
+                                        <td>@task.Status</td>
+                                        <td>
+                                            <div class="btn-group btn-group-sm">
+                                                <a class="btn btn-outline-primary" asp-controller="Task" asp-action="Edit" asp-route-id="@task.Id">Edit</a>
+                                                <a class="btn btn-outline-danger" asp-controller="Task" asp-action="Delete" asp-route-id="@task.Id">Delete</a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Categories -->
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-warning text-dark fw-semibold">All Categories</div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Category ID</th>
+                                    <th>Name</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var category in Model.Categories)
+                                {
+                                    <tr>
+                                        <td>@category.CategoryId</td>
+                                        <td>@category.Name</td>
+                                        <td>
+                                            <div class="btn-group btn-group-sm">
+                                                <a class="btn btn-outline-primary" asp-controller="Category" asp-action="Edit" asp-route-id="@category.CategoryId">Edit</a>
+                                                <a class="btn btn-outline-danger" asp-controller="Category" asp-action="Delete" asp-route-id="@category.CategoryId">Delete</a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Priorities -->
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-danger text-white fw-semibold">All Priorities</div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Priority ID</th>
+                                    <th>Level</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var priority in Model.Priorities)
+                                {
+                                    <tr>
+                                        <td>@priority.PriorityId</td>
+                                        <td>@priority.Level</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

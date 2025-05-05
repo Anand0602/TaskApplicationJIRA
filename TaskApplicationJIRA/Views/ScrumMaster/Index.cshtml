@@ -1,0 +1,99 @@
+﻿@model TaskApplicationJIRA.ViewModels.ScrumMasterViewModel
+
+@{
+    ViewData["Title"] = "Scrum Master Dashboard";
+}
+
+<h2>All Tasks</h2>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Category</th>
+            <th>Priority</th>
+            <th>Status</th>
+            <th>Due Date</th>
+            <th>Assign To</th>
+            <th>Image</th>
+            
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var task in Model.Tasks)
+        {
+            <tr>
+                <td>@task.Title</td>
+                <td>@task.Description</td>
+                <td>@task.CategoryName</td>
+                <td>@task.PriorityLevel</td>
+                <td>@task.Status</td>
+                <td>@task.DueDate?.ToString("yyyy-MM-dd")</td>
+                <td>
+                    <form asp-action="Assign" method="post" class="d-flex">
+                        <input type="hidden" name="taskId" value="@task.TaskId" />
+
+                        @if (task.AssignedToUserId == null || task.AssignedToUserId == 0)
+                        {
+                            <select name="developerId" class="form-select me-1" required>
+                                <option value="" disabled selected>-- Select Developer --</option>
+                                @foreach (var dev in Model.Developers)
+                                {
+                                    <option value="@dev.UserId">@dev.Username</option>
+                                }
+                            </select>
+                            <button type="submit" class="btn btn-sm btn-primary">Assign</button>
+                        }
+
+                        else
+                        {
+                            var assignedUser = Model.Developers.FirstOrDefault(u => u.UserId == task.AssignedToUserId);
+                            <span class="form-control me-1">@assignedUser?.Username</span>
+                        }
+                    </form>
+
+                </td>
+                <td>
+                    @if (!string.IsNullOrEmpty(task.ImageUrl))
+                    {
+                        <img src="@task.ImageUrl" width="50" style="cursor:pointer"
+                             class="img-thumbnail"
+                             data-bs-toggle="modal"
+                             data-bs-target="#imageModal"
+                             onclick="showImageModal('@task.ImageUrl', '@task.Title')" />
+                    }
+
+                </td>
+                
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+
+<div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="imageModalLabel">Task Image Preview</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                <img id="modalImage" src="" class="img-fluid rounded shadow" alt="Task Image" />
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script>
+        function showImageModal(imageUrl, taskTitle) {
+            document.getElementById('modalImage').src = imageUrl;
+            document.getElementById('imageModalLabel').textContent = taskTitle;
+        }
+    </script>
+}
+

@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35919.96 d17.13
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskApplicationJIRA", "TaskApplicationJIRA\TaskApplicationJIRA.csproj", "{15413DB8-C78C-40B2-94BA-2849B9445540}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{15413DB8-C78C-40B2-94BA-2849B9445540}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{15413DB8-C78C-40B2-94BA-2849B9445540}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{15413DB8-C78C-40B2-94BA-2849B9445540}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{15413DB8-C78C-40B2-94BA-2849B9445540}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6B7152C9-F8EB-4202-87AF-F2C9B46F8387}
+	EndGlobalSection
+EndGlobal

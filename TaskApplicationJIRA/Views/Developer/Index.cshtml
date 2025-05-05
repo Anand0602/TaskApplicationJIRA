@@ -1,0 +1,121 @@
+﻿@model List<TaskApplicationJIRA.Models.ViewModels.TaskAssignedDevView>
+
+@{
+    ViewData["Title"] = "Developer Dashboard";
+}
+
+<h2>Your Assigned Tasks</h2>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Category</th>
+            <th>Priority</th>
+            <th>Status</th>
+            <th>Due Date</th>
+            <th>Image</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var task in Model)
+        {
+            <tr>
+                <td>@task.Title</td>
+                <td>@task.Description</td>
+                <td>@task.CategoryName</td>
+                <td>@task.PriorityLevel</td>
+                <td>
+                    <!-- Dropdown to Change Task Status -->
+                    
+                        @if (task.Status == "Completed")
+                        {
+                            <span class="badge bg-success">Completed</span>
+                        }
+                        else
+                        {
+                            <select class="form-select" aria-label="Change Task Status" onchange="updateTaskStatus(@task.TaskId, this.value)">
+                                @if (task.Status == "Not Started")
+                                {
+                                    <option value="Not Started" selected>Not Started</option>
+                                }
+                                else
+                                {
+                                    <option value="Not Started">Not Started</option>
+                                }
+
+                                @if (task.Status == "In Progress")
+                                {
+                                    <option value="In Progress" selected>In Progress</option>
+                                }
+                                else
+                                {
+                                    <option value="In Progress">In Progress</option>
+                                }
+
+                                <option value="Completed">Completed</option>
+                            </select>
+                        }
+
+                </td>
+
+                <td>@task.DueDate?.ToString("yyyy-MM-dd")</td>
+                <td>
+                    @if (!string.IsNullOrEmpty(task.ImageUrl))
+                    {
+                        <img src="@task.ImageUrl" width="50" style="cursor:pointer"
+                             class="img-thumbnail"
+                             data-bs-toggle="modal"
+                             data-bs-target="#imageModal"
+                             onclick="showImageModal('@task.ImageUrl', '@task.Title')" />
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!-- Image Preview Modal -->
+<div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="imageModalLabel">Task Image Preview</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                <img id="modalImage" src="" class="img-fluid rounded shadow" alt="Task Image" />
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function showImageModal(imageUrl, taskTitle) {
+            document.getElementById('modalImage').src = imageUrl;
+            document.getElementById('imageModalLabel').textContent = taskTitle;
+        }
+
+        function updateTaskStatus(taskId, newStatus) {
+            // Send the status update to the server using AJAX
+            $.ajax({
+                url: '/Developer/UpdateStatus', 
+                type: 'POST',
+                data: {
+                    taskId: taskId,
+                    status: newStatus
+                },
+                success: function(response) {
+                    
+                    alert("Task status updated successfully!");
+                },
+                error: function(xhr, status, error) {
+                    // Handles error if the request fails
+                    alert("Error updating task status.");
+                }
+            });
+        }
+    </script>
+}
