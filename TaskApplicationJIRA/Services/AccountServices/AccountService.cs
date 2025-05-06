@@ -20,10 +20,11 @@ namespace TaskApplicationJIRA.Services.AccountServices
         public async Task<bool> RegisterUserAsync(User user)
         {
             if (UserExists(user.Email))
+
                 return false;
 
-            if (user.Email == "admin@gmail.com")
-                user.Role = "Admin";
+            //if (user.Email == "admin@gmail.com")
+            //    user.Role = "Admin";
 
             user.CreatedOn = DateTime.Now;
             user.CreatedBy = user.UserId;

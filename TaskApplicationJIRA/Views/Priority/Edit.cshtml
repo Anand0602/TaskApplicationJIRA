@@ -1,0 +1,29 @@
+﻿@model TaskApplicationJIRA.Models.PriorityModel.Priority
+
+@{
+    ViewData["Title"] = "Edit Priority";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <h2 class="text-center mb-4">Edit Priority</h2>
+            <div class="card shadow-sm p-4">
+                <form asp-action="Edit" method="post">
+                    <input type="hidden" asp-for="PriorityId" />
+
+                    <div class="form-group mb-3">
+                        <label asp-for="Level" class="form-label">Priority Level</label>
+                        <input asp-for="Level" class="form-control" />
+                        <span asp-validation-for="Level" class="text-danger"></span>
+                    </div>
+
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary">Update</button>
+                        <a asp-action="Index" class="btn btn-secondary ms-2">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

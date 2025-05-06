@@ -3,8 +3,6 @@ using TaskApplicationJIRA.Models.TaskModel;
 
 namespace TaskApplicationJIRA.Services.Interfaces
 {
-    
-
     public interface ITaskService
     {
         Task<TaskItemViewModel> GetCreateTaskViewModelAsync();
@@ -13,6 +11,8 @@ namespace TaskApplicationJIRA.Services.Interfaces
         Task<bool> EditTaskAsync(int id, TaskItemViewModel model, IFormFile image);
         Task<TaskItem?> GetTaskForDeleteAsync(int id);
         Task DeleteTaskAsync(int id);
-    }
 
+        // Add the GetAllTasksAsync method definition
+        Task<IEnumerable<TaskItem>> GetAllTasksAsync();
+    }
 }

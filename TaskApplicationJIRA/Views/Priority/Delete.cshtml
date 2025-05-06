@@ -1,0 +1,33 @@
+﻿@model TaskApplicationJIRA.Models.PriorityModel.Priority
+
+@{
+    ViewData["Title"] = "Delete Priority";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <h2 class="text-center text-danger mb-4">Delete Priority</h2>
+            <div class="card shadow-sm p-4">
+                <form asp-action="Delete">
+                    <input type="hidden" asp-for="PriorityId" />
+
+                    <p>Are you sure you want to delete the following priority?</p>
+
+                    <dl class="row mb-3">
+                        <dt class="col-sm-4">Priority ID</dt>
+                        <dd class="col-sm-8">@Model.PriorityId</dd>
+
+                        <dt class="col-sm-4">Level</dt>
+                        <dd class="col-sm-8">@Model.Level</dd>
+                    </dl>
+
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                        <a asp-action="Index" class="btn btn-secondary ms-2">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
