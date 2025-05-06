@@ -88,12 +88,46 @@
 </div>
 
 
+@* @section Scripts { *@
+@*     <script> *@
+@*         function showImageModal(imageUrl, taskTitle) { *@
+@*             document.getElementById('modalImage').src = imageUrl; *@
+@*             document.getElementById('imageModalLabel').textContent = taskTitle; *@
+@*         } *@
+@*     </script> *@
+@* } *@
+
+
 @section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.5.0/dist/sweetalert2.min.js"></script>
+
     <script>
         function showImageModal(imageUrl, taskTitle) {
             document.getElementById('modalImage').src = imageUrl;
             document.getElementById('imageModalLabel').textContent = taskTitle;
         }
+
+               document.addEventListener("DOMContentLoaded", function () {
+            @if (TempData["LoginSuccess"] != null)
+            {
+                    <text>
+                        Swal.fire({
+                            toast: true,
+                            position: 'top-end',
+                            icon: 'success',
+                            title: '@TempData["LoginSuccess"]',
+                            showConfirmButton: false,
+                            timer: 4000,
+                            timerProgressBar: true,
+                            background: '#f0f9eb',
+                            color: '#1b5e20',
+                            didOpen: (toast) => {
+                                toast.addEventListener('mouseenter', Swal.stopTimer)
+                                toast.addEventListener('mouseleave', Swal.resumeTimer)
+                            }
+                        });
+                    </text>
+            }
+        });
     </script>
 }
-

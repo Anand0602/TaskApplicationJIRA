@@ -1,5 +1,4 @@
-﻿// Controllers/AccountController.cs
-using Microsoft.AspNetCore.Authentication;
+﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -17,9 +16,11 @@ namespace TaskApplicationJIRA.Controllers
             _accountService = accountService;
         }
 
+        // GET: Register
         [HttpGet]
         public IActionResult Register() => View();
 
+        // POST: Register
         [HttpPost]
         public async Task<IActionResult> Register(User model)
         {
@@ -30,16 +31,19 @@ namespace TaskApplicationJIRA.Controllers
 
             if (!success)
             {
-                ModelState.AddModelError("", "User already exists with this email.");
+                TempData["Error"] = "User already exists with this email."; // SweetAlert Error Message
                 return View(model);
             }
 
+            TempData["LoginSuccess"] = "Registration successful. You can now log in."; // SweetAlert Success Message
             return RedirectToAction("Login", "Account");
         }
 
+        // GET: Login
         [HttpGet]
         public IActionResult Login() => View();
 
+        // POST: Login
         [HttpPost]
         public async Task<IActionResult> Login(string email, string password)
         {
@@ -50,21 +54,23 @@ namespace TaskApplicationJIRA.Controllers
 
             if (user == null)
             {
-                ModelState.AddModelError("", "Invalid email or password.");
+                TempData["Error"] = "Invalid email or password."; // SweetAlert Error Message
                 return View();
             }
 
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Name, user.Username),
-                new Claim(ClaimTypes.Email, user.Email),
-                new Claim(ClaimTypes.Role, user.Role)
+                new Claim(ClaimTypes.Name, user.Username), // Stores the user's display name or username. Useful for displaying in the UI or identifying the logged-in user
+                new Claim(ClaimTypes.Email, user.Email),   //Stores the email address, which might be used for contacting or uniquely identifying the user.
+                new Claim(ClaimTypes.Role, user.Role)      //Stores the user role (e.g., Admin, Developer, Scrum Master). This is crucial for role-based authorization, allowing you to restrict access to specific parts of the app.
             };
 
             var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
             var principal = new ClaimsPrincipal(identity);
 
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+
+            TempData["LoginSuccess"] = "Login successful!"; // SweetAlert Success Message
 
             return user.Role switch
             {
@@ -75,10 +81,12 @@ namespace TaskApplicationJIRA.Controllers
             };
         }
 
+        // POST: Logout
         [HttpPost]
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            TempData["LoginSuccess"] = "You have logged out successfully."; // SweetAlert Success Message
             return RedirectToAction("Login", "Account");
         }
     }

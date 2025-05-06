@@ -18,9 +18,8 @@ namespace TaskApplicationJIRA.Models.UserModel
         public string Role { get; set; }
 
         [Required]
-        [StringLength(100, MinimumLength = 6)]
-        [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$#&])[A-Za-z\d@$#&]{6,}$",
-      ErrorMessage = "Password must be at least 6 characters and include one uppercase, one lowercase, one digit, and one special character (@, $, #, &).")]
+        [DataType(DataType.Password)]
+        [RegularExpression("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$", ErrorMessage = "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one digit, and one special character.")]
         public string Password { get; set; }
 
 
