@@ -30,6 +30,7 @@ namespace TaskApplicationJIRA.Controllers.CategoryControllers
             if (ModelState.IsValid)
             {
                 await _categoryService.AddAsync(category);
+                TempData["SuccessMessage"] = "Category created successfully!";
                 return RedirectToAction("Index", "Admin");
             }
             return View(category);
@@ -55,6 +56,7 @@ namespace TaskApplicationJIRA.Controllers.CategoryControllers
                 try
                 {
                     await _categoryService.UpdateAsync(category);
+                    TempData["SuccessMessage"] = "Category updated successfully!";
                     return RedirectToAction("Index", "Admin");
                 }
                 catch (DbUpdateConcurrencyException)
@@ -81,6 +83,7 @@ namespace TaskApplicationJIRA.Controllers.CategoryControllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             await _categoryService.DeleteAsync(id);
+            TempData["SuccessMessage"] = "Category deleted successfully!";
             return RedirectToAction("Index", "Admin");
         }
     }

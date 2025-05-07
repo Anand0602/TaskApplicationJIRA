@@ -1,76 +1,645 @@
-﻿<!DOCTYPE html>
+﻿@* <!DOCTYPE html> *@
+@* <html lang="en"> *@
+@* <head> *@
+@*     <meta charset="utf-8" /> *@
+@*     <meta name="viewport" content="width=device-width, initial-scale=1.0" /> *@
+@*     <title>@ViewData["Title"] - TaskApplicationJIRA</title> *@
+
+@*     <!-- Bootstrap CSS --> *@
+@*     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" /> *@
+@*     <!-- Bootstrap Icons CDN --> *@
+@*     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet" /> *@
+@*     <!-- Site CSS --> *@
+@*     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" /> *@
+@*     <link rel="stylesheet" href="~/TaskApplicationJIRA.styles.css" asp-append-version="true" /> *@
+
+@*     <style> *@
+@*         .text-gradient { *@
+@*             background: linear-gradient(90deg,black, #6610f2); *@
+@*             -webkit-background-clip: text; *@
+@*             -webkit-text-fill-color: transparent; *@
+@*         } *@
+
+@*         .sidebar-link { *@
+@*             transition: all 0.2s ease-in-out; *@
+@*         } *@
+
+@*             .sidebar-link:hover { *@
+@*                 background-color: #f0f2f5; *@
+@*                 transform: translateX(5px); *@
+@*                 text-decoration: none; *@
+@*             } *@
+
+@*         .nav-link.active { *@
+@*             background-color: #e9ecef; *@
+@*             font-weight: bold; *@
+@*         } *@
+
+@*         .navbar { *@
+@*             padding-top: 0.8rem; *@
+@*             padding-bottom: 0.8rem; *@
+@*         } *@
+
+@*         .navbar-nav .btn { *@
+@*             white-space: nowrap; *@
+@*         } *@
+
+@*         aside { *@
+@*             background-color: #f8f9fa; *@
+@*         } *@
+
+@*         main { *@
+@*             background-color: #ffffff; *@
+@*         } *@
+@*     </style> *@
+@* </head> *@
+@* <body> *@
+@*     <header> *@
+@*         <nav class="navbar navbar-expand-sm navbar-dark bg-primary shadow-sm mb-3"> *@
+
+@*             <div class="container-fluid"> *@
+@*                 <ul class="navbar-nav flex-grow-1"> *@
+@*                     @if (User.IsInRole("Admin")) *@
+@*                     { *@
+@*                         <li class="nav-item"> *@
+@*                             <a class="nav-link btn btn-outline-dark rounded-pill px-4 py-2 me-2 d-flex align-items-center gap-2" asp-controller="Admin" asp-action="Index"> *@
+@*                                 <i class="bi bi-shield-lock-fill text-primary"></i> Admin Dashboard *@
+@*                             </a> *@
+@*                         </li> *@
+@*                     } *@
+@*                     else if (User.IsInRole("Scrum Master")) *@
+@*                     { *@
+@*                         <li class="nav-item"> *@
+@*                             <a class="nav-link btn btn-outline-primary rounded-pill px-4 py-2 me-2 d-flex align-items-center gap-2" asp-controller="ScrumMaster" asp-action="Index"> *@
+@*                                 <i class="bi bi-diagram-3-fill text-info"></i> Scrum Master Dashboard *@
+@*                             </a> *@
+@*                         </li> *@
+@*                     } *@
+@*                     else if (User.IsInRole("Developer")) *@
+@*                     { *@
+@*                         <li class="nav-item"> *@
+@*                             <a class="nav-link btn btn-outline-success rounded-pill px-4 py-2 me-2 d-flex align-items-center gap-2" asp-controller="Developer" asp-action="Index"> *@
+@*                                 <i class="bi bi-code-slash text-success"></i> Developer Dashboard *@
+@*                             </a> *@
+@*                         </li> *@
+@*                     } *@
+@*                     else *@
+@*                     { *@
+@*                         <li class="nav-item"> *@
+@*                             <a class="nav-link btn btn-outline-secondary rounded-pill px-4 py-2 me-2 d-flex align-items-center gap-2" asp-controller="Home" asp-action="Index"> *@
+@*                                 <i class="bi bi-house-door-fill text-secondary"></i> Home *@
+@*                             </a> *@
+@*                         </li> *@
+@*                     } *@
+@*                 </ul> *@
+
+@*                 <ul class="navbar-nav ms-auto"> *@
+@*                     @if (User.Identity.IsAuthenticated) *@
+@*                     { *@
+@*                         <form class="d-flex" method="post" asp-action="Logout" asp-controller="Account"> *@
+@*                             <button type="submit" class="btn btn-outline-danger rounded-pill">Logout</button> *@
+@*                         </form> *@
+@*                     } *@
+@*                 </ul> *@
+@*             </div> *@
+@*         </nav> *@
+@*     </header> *@
+
+@*     <div class="container-fluid px-0"> *@
+@*         <div class="row gx-0"> *@
+@*             @if (User.IsInRole("Admin")) *@
+@*             { *@
+@*                 <aside class="col-md-3 col-lg-2 d-flex flex-column border-end shadow-sm vh-100 p-4"> *@
+@*                     <div class="mb-4 pb-2 border-bottom"> *@
+@*                         <h4 class="fw-bold text-dark d-flex align-items-center gap-2"> *@
+@*                             <i class="bi bi-tools text-secondary fs-4"></i> Admin Control Panel *@
+@*                         </h4> *@
+@*                     </div> *@
+@*                     <nav class="nav flex-column"> *@
+@*                         <a class="nav-link d-flex align-items-center gap-2 py-3 px-3 rounded sidebar-link" asp-action="Index" asp-controller="Category"> *@
+@*                             <i class="bi bi-folder-fill fs-5 text-primary"></i> Category *@
+@*                         </a> *@
+@*                         <a class="nav-link d-flex align-items-center gap-2 py-3 px-3 rounded sidebar-link" asp-action="Index" asp-controller="Priority"> *@
+@*                             <i class="bi bi-flag-fill fs-5 text-danger"></i> Priority *@
+@*                         </a> *@
+@*                         <a class="nav-link d-flex align-items-center gap-2 py-3 px-3 rounded sidebar-link" asp-action="Index" asp-controller="Task"> *@
+@*                             <i class="bi bi-clipboard-check-fill fs-5 text-success"></i> Task *@
+@*                         </a> *@
+@*                         <a class="nav-link d-flex align-items-center gap-2 py-3 px-3 rounded sidebar-link" asp-action="Index" asp-controller="User"> *@
+@*                             <i class="bi bi-person-fill fs-5 text-warning"></i> User *@
+@*                         </a> *@
+@*                     </nav> *@
+@*                 </aside> *@
+@*             } *@
+
+@*             <main class="col-md-9 col-lg-10 p-5"> *@
+@*                 @if (User.IsInRole("Admin") *@
+@*                                 && ViewContext.RouteData.Values["Controller"]?.ToString() == "Admin" *@
+@*                                 && ViewContext.RouteData.Values["Action"]?.ToString() == "Index") *@
+@*                 { *@
+@*                     <div class="d-flex justify-content-between align-items-center mb-4"> *@
+@*                         <div> *@
+@*                             <h1 class="fw-bold">Admin Control Panel</h1> *@
+@*                             <p class="lead text-muted">Welcome to the admin control panel.</p> *@
+@*                         </div> *@
+@*                     </div> *@
+@*                 } *@
+
+@*                 @RenderBody() *@
+
+@*                 @if (ViewData["Section"] != null) *@
+@*                 { *@
+@*                     <div class="mt-4"> *@
+@*                         <h3>@ViewData["Section"]</h3> *@
+@*                         <p>Manage all @ViewData["Section"] here.</p> *@
+@*                     </div> *@
+@*                 } *@
+@*             </main> *@
+@*         </div> *@
+@*     </div> *@
+
+@*     <script src="~/lib/jquery/dist/jquery.min.js"></script> *@
+@*     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script> *@
+@*     <script src="~/js/site.js" asp-append-version="true"></script> *@
+
+@*     @await RenderSectionAsync("Scripts", required: false) *@
+@*     @await Html.PartialAsync("_SweetAlerts") *@
+@* </body> *@
+@* </html> *@
+
+
+@* <!DOCTYPE html> *@
+@* <html lang="en"> *@
+@* <head> *@
+@*     <meta charset="utf-8" /> *@
+@*     <meta name="viewport" content="width=device-width, initial-scale=1.0" /> *@
+@*     <title>@ViewData["Title"] - TaskApplicationJIRA</title> *@
+
+@*     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" /> *@
+@*     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet" /> *@
+@*     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" /> *@
+@*     <link rel="stylesheet" href="~/TaskApplicationJIRA.styles.css" asp-append-version="true" /> *@
+
+@*     <style> *@
+@*         .text-gradient { *@
+@*             background: linear-gradient(90deg, black, #6610f2); *@
+@*             -webkit-background-clip: text; *@
+@*             -webkit-text-fill-color: transparent; *@
+@*         } *@
+
+@*         .sidebar-link { *@
+@*             transition: all 0.2s ease-in-out; *@
+@*         } *@
+
+@*             .sidebar-link:hover { *@
+@*                 background-color: #f0f2f5; *@
+@*                 transform: translateX(5px); *@
+@*                 text-decoration: none; *@
+@*             } *@
+
+@*         .nav-link.active { *@
+@*             background-color: #e9ecef; *@
+@*             font-weight: bold; *@
+@*         } *@
+
+@*         .navbar { *@
+@*             padding-top: 0.8rem; *@
+@*             padding-bottom: 0.8rem; *@
+@*         } *@
+
+@*         .dropdown-menu { *@
+@*             background-color: #2f3542; *@
+@*             border: none; *@
+@*             border-radius: 0.5rem; *@
+@*             min-width: 200px; *@
+@*         } *@
+
+@*             .dropdown-menu a, *@
+@*             .dropdown-menu button { *@
+@*                 color: white !important; *@
+@*                 transition: background-color 0.2s ease-in-out; *@
+@*             } *@
+
+@*                 .dropdown-menu a:hover, *@
+@*                 .dropdown-menu button:hover { *@
+@*                     background-color: #3e4551; *@
+@*                 } *@
+
+@*         .bg-pink { *@
+@*             background-color: #e91e63; *@
+@*         } *@
+
+@*         aside { *@
+@*             background-color: #f8f9fa; *@
+@*         } *@
+
+@*         main { *@
+@*             background-color: #ffffff; *@
+@*         } *@
+
+@*         footer { *@
+@*             background-color: #343a40; *@
+@*             color: #ffffff; *@
+@*             padding: 1rem; *@
+@*             text-align: center; *@
+@*         } *@
+
+@*         .dashboard-link { *@
+@*             color: white; *@
+@*             background-color: transparent; *@
+@*             border: 1px solid #ffffff; *@
+@*             border-radius: 50rem; *@
+@*             padding: 0.5rem 1.5rem; *@
+@*             display: flex; *@
+@*             align-items: center; *@
+@*             gap: 0.5rem; *@
+@*             transition: background-color 0.3s ease, transform 0.2s ease; *@
+@*         } *@
+
+@*             .dashboard-link:hover { *@
+@*                 background-color: rgba(255, 255, 255, 0.15); *@
+@*                 color: white !important; *@
+@*                 text-decoration: none; *@
+@*                 transform: translateY(-1px); *@
+@*             } *@
+@*     </style> *@
+@* </head> *@
+@* <body> *@
+@*     <header> *@
+@*         <nav class="navbar navbar-expand-sm navbar-dark" style="background-color: #343a40;"> *@
+@*             <div class="container-fluid"> *@
+@*                 <ul class="navbar-nav flex-grow-1"> *@
+@*                     @if (User.IsInRole("Admin")) *@
+@*                     { *@
+@*                         <li class="nav-item"> *@
+@*                             <a class="nav-link dashboard-link" *@
+@*                                asp-controller="Admin" asp-action="Index"> *@
+@*                                 <i class="bi bi-shield-lock-fill text-white"></i> Admin Dashboard *@
+@*                             </a> *@
+@*                         </li> *@
+@*                     } *@
+@*                     else if (User.IsInRole("Scrum Master")) *@
+@*                     { *@
+@*                         <li class="nav-item"> *@
+@*                             <a class="nav-link dashboard-link" *@
+@*                                asp-controller="ScrumMaster" asp-action="Index"> *@
+@*                                 <i class="bi bi-diagram-3-fill text-white"></i> Scrum Master Dashboard *@
+@*                             </a> *@
+@*                         </li> *@
+@*                     } *@
+@*                     else if (User.IsInRole("Developer")) *@
+@*                     { *@
+@*                         <li class="nav-item"> *@
+@*                             <a class="nav-link dashboard-link" *@
+@*                                asp-controller="Developer" asp-action="Index"> *@
+@*                                 <i class="bi bi-code-slash text-white"></i> Developer Dashboard *@
+@*                             </a> *@
+@*                         </li> *@
+@*                     } *@
+@*                     else *@
+@*                     { *@
+@*                         <li class="nav-item"> *@
+@*                             <a class="nav-link dashboard-link" *@
+@*                                asp-controller="Home" asp-action="Index"> *@
+@*                                 <i class="bi bi-house-door-fill text-white"></i> Home *@
+@*                             </a> *@
+@*                         </li> *@
+@*                     } *@
+
+
+@*                 <ul class="navbar-nav ms-auto"> *@
+@*                     @if (User.Identity.IsAuthenticated) *@
+@*                     { *@
+@*                         <li class="nav-item dropdown"> *@
+@*                             <a class="nav-link dropdown-toggle text-white d-flex align-items-center gap-2" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"> *@
+@*                                 <div class="rounded-circle bg-pink text-white text-center fw-bold" style="width: 32px; height: 32px; line-height: 32px;"> *@
+@*                                     @User.Identity.Name?.Substring(0, 2).ToUpper() *@
+@*                                 </div> *@
+@*                                 @User.Identity.Name *@
+@*                             </a> *@
+@*                             <ul class="dropdown-menu dropdown-menu-end shadow"> *@
+@*                                 <li> *@
+@*                                     <a class="dropdown-item d-flex align-items-center gap-2" asp-controller="Account" asp-action="ChangePassword"> *@
+@*                                         <i class="bi bi-key-fill"></i> Change Password *@
+@*                                     </a> *@
+@*                                 </li> *@
+@*                                 <li> *@
+@*                                     <form method="post" asp-action="Logout" asp-controller="Account" class="w-100"> *@
+@*                                         <button type="submit" *@
+@*                                                 class="dropdown-item d-flex align-items-center gap-2 w-100 bg-transparent border-0 text-white" *@
+@*                                                 style="padding-left: 1rem;"> *@
+@*                                             <i class="bi bi-power"></i> Sign Out *@
+@*                                         </button> *@
+@*                                     </form> *@
+@*                                 </li> *@
+
+@*                             </ul> *@
+@*                         </li> *@
+@*                     } *@
+@*                 </ul> *@
+@*             </div> *@
+@*         </nav> *@
+@*     </header> *@
+
+@*     <div class="container-fluid px-0"> *@
+@*         <div class="row gx-0"> *@
+@*             @if (User.IsInRole("Admin")) *@
+@*             { *@
+@*                 <aside class="col-md-3 col-lg-2 d-flex flex-column border-end shadow-sm vh-100 p-4"> *@
+@*                     <div class="mb-4 pb-2 border-bottom"> *@
+@*                         <h4 class="fw-bold text-dark d-flex align-items-center gap-2"> *@
+@*                             <i class="bi bi-tools text-secondary fs-4"></i> Admin Control Panel *@
+@*                         </h4> *@
+@*                     </div> *@
+@*                     <nav class="nav flex-column"> *@
+@*                         <a class="nav-link d-flex align-items-center gap-2 py-3 px-3 rounded sidebar-link" asp-action="Index" asp-controller="Category"> *@
+@*                             <i class="bi bi-folder-fill fs-5 text-primary"></i> Category *@
+@*                         </a> *@
+@*                         <a class="nav-link d-flex align-items-center gap-2 py-3 px-3 rounded sidebar-link" asp-action="Index" asp-controller="Priority"> *@
+@*                             <i class="bi bi-flag-fill fs-5 text-danger"></i> Priority *@
+@*                         </a> *@
+@*                         <a class="nav-link d-flex align-items-center gap-2 py-3 px-3 rounded sidebar-link" asp-action="Index" asp-controller="Task"> *@
+@*                             <i class="bi bi-clipboard-check-fill fs-5 text-success"></i> Task *@
+@*                         </a> *@
+@*                         <a class="nav-link d-flex align-items-center gap-2 py-3 px-3 rounded sidebar-link" asp-action="Index" asp-controller="User"> *@
+@*                             <i class="bi bi-person-fill fs-5 text-warning"></i> User *@
+@*                         </a> *@
+@*                     </nav> *@
+@*                 </aside> *@
+@*             } *@
+
+@*             <main class="col-md-9 col-lg-10 p-5"> *@
+@*                 @if (User.IsInRole("Admin") *@
+@*                                 && ViewContext.RouteData.Values["Controller"]?.ToString() == "Admin" *@
+@*                                 && ViewContext.RouteData.Values["Action"]?.ToString() == "Index") *@
+@*                 { *@
+@*                     <div class="d-flex justify-content-between align-items-center mb-4"> *@
+@*                         <div> *@
+@*                             <h1 class="fw-bold">Admin Control Panel</h1> *@
+@*                             <p class="lead text-muted">Welcome to the admin control panel.</p> *@
+@*                         </div> *@
+@*                     </div> *@
+@*                 } *@
+
+@*                 @RenderBody() *@
+
+@*                 @if (ViewData["Section"] != null) *@
+@*                 { *@
+@*                     <div class="mt-4"> *@
+@*                         <h3>@ViewData["Section"]</h3> *@
+@*                         <p>Manage all @ViewData["Section"] here.</p> *@
+@*                     </div> *@
+@*                 } *@
+@*             </main> *@
+@*         </div> *@
+@*     </div> *@
+
+@*     <footer> *@
+@*         <div class="container"> *@
+@*             &copy; @DateTime.Now.Year - TaskApplicationJIRA. All rights reserved. *@
+@*         </div> *@
+@*     </footer> *@
+
+@*     <script src="~/lib/jquery/dist/jquery.min.js"></script> *@
+@*     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script> *@
+@*     <script src="~/js/site.js" asp-append-version="true"></script> *@
+@*     @await RenderSectionAsync("Scripts", required: false) *@
+@*     @await Html.PartialAsync("_SweetAlerts") *@
+@* </body> *@
+@* </html> *@
+
+
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - TaskApplicationJIRA</title>
+
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/TaskApplicationJIRA.styles.css" asp-append-version="true" />
+
+    <style>
+        .text-gradient {
+            background: linear-gradient(90deg, black, #6610f2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .sidebar-link {
+            transition: all 0.2s ease-in-out;
+        }
+
+        .sidebar-link:hover {
+            background-color: #f0f2f5;
+            transform: translateX(5px);
+            text-decoration: none;
+        }
+
+        .nav-link.active {
+            background-color: #e9ecef;
+            font-weight: bold;
+        }
+
+        .navbar {
+            padding-top: 0.8rem;
+            padding-bottom: 0.8rem;
+        }
+
+        .dropdown-menu {
+            background-color: #2f3542;
+            border: none;
+            border-radius: 0.5rem;
+            min-width: 200px;
+        }
+
+        .dropdown-menu a,
+        .dropdown-menu button {
+            color: white !important;
+            transition: background-color 0.2s ease-in-out;
+        }
+
+        .dropdown-menu a:hover,
+        .dropdown-menu button:hover {
+            background-color: #3e4551;
+        }
+
+        .bg-pink {
+            background-color: #e91e63;
+        }
+
+        aside {
+            background-color: #f8f9fa;
+        }
+
+        main {
+            background-color: #ffffff;
+        }
+
+        footer {
+            background-color: #343a40;
+            color: #ffffff;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .dashboard-link {
+            color: white;
+            background-color: transparent;
+            border: 1px solid #ffffff;
+            border-radius: 50rem;
+            padding: 0.5rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .dashboard-link:hover {
+            background-color: rgba(255, 255, 255, 0.15);
+            color: white !important;
+            text-decoration: none;
+            transform: translateY(-1px);
+        }
+    </style>
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-dark" style="background-color: #343a40;">
             <div class="container-fluid">
-                <!-- Role-Based Navigation -->
-                @if (User.IsInRole("Admin"))
-                {
-                    
-                    <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="Index">Admin Dashboard</a>
-                    
-                }
-                else if (User.IsInRole("Scrum Master"))
-                {
-                    
-                    <a class="nav-link text-dark" asp-area="" asp-controller="ScrumMaster" asp-action="Index">Project Manager   Dashboard</a>
-                    
-                }
-                else if (User.IsInRole("Developer"))
-                {
-                    
-                    <a class="nav-link text-dark" asp-area="" asp-controller="Developer" asp-action="Index">Developer Dashboard</a>
-                    
-                }
-                else
-                {
-                    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                }
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
+                <ul class="navbar-nav flex-grow-1">
+                    @if (User.IsInRole("Admin"))
+                    {
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link dashboard-link" asp-controller="Admin" asp-action="Index">
+                                <i class="bi bi-shield-lock-fill text-white"></i> Admin Dashboard
+                            </a>
                         </li>
-                    </ul>
-                    <!-- Show logout button only if the user is logged in -->
+                    }
+                    else if (User.IsInRole("Scrum Master"))
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link dashboard-link" asp-controller="ScrumMaster" asp-action="Index">
+                                <i class="bi bi-diagram-3-fill text-white"></i> Scrum Master Dashboard
+                            </a>
+                        </li>
+                    }
+                    else if (User.IsInRole("Developer"))
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link dashboard-link" asp-controller="Developer" asp-action="Index">
+                                <i class="bi bi-code-slash text-white"></i> Developer Dashboard
+                            </a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link dashboard-link" asp-controller="Home" asp-action="Index">
+                                <i class="bi bi-house-door-fill text-white"></i> Home
+                            </a>
+                        </li>
+                    }
+                </ul>
+
+                <ul class="navbar-nav ms-auto">
                     @if (User.Identity.IsAuthenticated)
                     {
-                        <form class="d-flex ms-auto" method="post" asp-action="Logout" asp-controller="Account">
-                            <button type="submit" class="btn btn-danger">Logout</button>
-                        </form>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-white d-flex align-items-center gap-2" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <div class="rounded-circle bg-pink text-white text-center fw-bold" style="width: 32px; height: 32px; line-height: 32px;">
+                                    @User.Identity.Name?.Substring(0, 2).ToUpper()
+                                </div>
+                                @User.Identity.Name
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end shadow">
+                                <li>
+                                    <a class="dropdown-item d-flex align-items-center gap-2" asp-controller="Account" asp-action="ChangePassword">
+                                        <i class="bi bi-key-fill"></i> Change Password
+                                    </a>
+                                </li>
+                                <li>
+                                    <form method="post" asp-action="Logout" asp-controller="Account" class="w-100">
+                                        <button type="submit" class="dropdown-item d-flex align-items-center gap-2 w-100 bg-transparent border-0 text-white" style="padding-left: 1rem;">
+                                            <i class="bi bi-power"></i> Sign Out
+                                        </button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </li>
                     }
-                </div>
+                </ul>
             </div>
         </nav>
     </header>
 
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
+    <div class="container-fluid px-0">
+        <div class="row gx-0">
+            @if (User.IsInRole("Admin"))
+            {
+                <aside class="col-md-3 col-lg-2 d-flex flex-column border-end shadow-sm vh-100 p-4">
+                    <div class="mb-4 pb-2 border-bottom">
+                        <h4 class="fw-bold text-dark d-flex align-items-center gap-2">
+                            <i class="bi bi-tools text-secondary fs-4"></i> Admin Control Panel
+                        </h4>
+                    </div>
+                    <nav class="nav flex-column">
+                        <a class="nav-link d-flex align-items-center gap-2 py-3 px-3 rounded sidebar-link" asp-action="Index" asp-controller="Category">
+                            <i class="bi bi-folder-fill fs-5 text-primary"></i> Category
+                        </a>
+                        <a class="nav-link d-flex align-items-center gap-2 py-3 px-3 rounded sidebar-link" asp-action="Index" asp-controller="Priority">
+                            <i class="bi bi-flag-fill fs-5 text-danger"></i> Priority
+                        </a>
+                        <a class="nav-link d-flex align-items-center gap-2 py-3 px-3 rounded sidebar-link" asp-action="Index" asp-controller="Task">
+                            <i class="bi bi-clipboard-check-fill fs-5 text-success"></i> Task
+                        </a>
+                        <a class="nav-link d-flex align-items-center gap-2 py-3 px-3 rounded sidebar-link" asp-action="Index" asp-controller="User">
+                            <i class="bi bi-person-fill fs-5 text-warning"></i> User
+                        </a>
+                    </nav>
+                </aside>
+            }
+
+            <main class="col-md-9 col-lg-10 p-5">
+                @if (User.IsInRole("Admin") 
+                    && ViewContext.RouteData.Values["Controller"]?.ToString() == "Admin"
+                    && ViewContext.RouteData.Values["Action"]?.ToString() == "Index")
+                {
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <div>
+                            <h1 class="fw-bold">Admin Control Panel</h1>
+                            <p class="lead text-muted">Welcome to the admin control panel.</p>
+                        </div>
+                    </div>
+                }
+
+                @RenderBody()
+
+                @if (ViewData["Section"] != null)
+                {
+                    <div class="mt-4">
+                        <h3>@ViewData["Section"]</h3>
+                        <p>Manage all @ViewData["Section"] here.</p>
+                    </div>
+                }
+            </main>
+        </div>
     </div>
 
-    <footer class="border-top footer text-muted">
+    <footer>
         <div class="container">
-            &copy; 2025 - TaskApplicationJIRA - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; @DateTime.Now.Year - TaskApplicationJIRA. All rights reserved.
         </div>
     </footer>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+
     @await RenderSectionAsync("Scripts", required: false)
+    @await Html.PartialAsync("_SweetAlerts")
 </body>
 </html>

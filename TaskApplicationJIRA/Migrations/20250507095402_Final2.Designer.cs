@@ -12,8 +12,8 @@ using TaskApplicationJIRA.Data;
 namespace TaskApplicationJIRA.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250505070554_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20250507095402_Final2")]
+    partial class Final2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -207,7 +207,7 @@ namespace TaskApplicationJIRA.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserId"));
 
-                    b.Property<int>("CreatedBy")
+                    b.Property<int?>("CreatedBy")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedOn")
@@ -225,8 +225,7 @@ namespace TaskApplicationJIRA.Migrations
 
                     b.Property<string>("Password")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Role")
                         .IsRequired()

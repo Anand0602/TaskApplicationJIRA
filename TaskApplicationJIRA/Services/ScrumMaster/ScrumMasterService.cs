@@ -1,5 +1,4 @@
-﻿// Services/ScrumMaster/ScrumMasterService.cs
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using TaskApplicationJIRA.Data;
 using TaskApplicationJIRA.Models.TaskAssignment;
 using TaskApplicationJIRA.ViewModels;
@@ -54,7 +53,7 @@ namespace TaskApplicationJIRA.Services.ScrumMaster
             };
         }
 
-        public async Task AssignTaskAsync(int taskId, int developerId)
+        public async Task<bool> AssignTaskAsync(int taskId, int developerId)
         {
             var existingAssignment = await _context.TaskAssignments
                 .FirstOrDefaultAsync(t => t.TaskId == taskId && t.DeletedOn == null);
@@ -77,7 +76,15 @@ namespace TaskApplicationJIRA.Services.ScrumMaster
                 existingAssignment.UpdatedOn = DateTime.Now;
             }
 
-            await _context.SaveChangesAsync();
+            try
+            {
+                await _context.SaveChangesAsync();
+                return true;  // Return true if assignment is successfully saved
+            }
+            catch (Exception)
+            {
+                return false;  // Return false if there is an error while saving
+            }
         }
     }
 }

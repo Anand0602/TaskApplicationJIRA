@@ -55,8 +55,25 @@ namespace TaskApplicationJIRA.Services.UserServices
 
             user.DeletedOn = DateTime.Now;
             user.DeletedBy = 1;
-            _context.Users.Remove(user); // or soft-delete
+            _context.Users.Remove(user); // Consider soft-delete
             await _context.SaveChangesAsync();
+        }
+
+        // ✅ Add this method for changing password
+        public async Task<bool> ChangePasswordAsync(int userId, string currentPassword, string newPassword)
+        {
+            var user = await _context.Users.FindAsync(userId);
+            if (user == null || user.Password != currentPassword)
+                return false;
+
+            user.Password = newPassword;
+            user.UpdatedOn = DateTime.Now;
+            user.UpdatedBy = 1;
+
+            _context.Users.Update(user);
+            await _context.SaveChangesAsync();
+
+            return true;
         }
     }
 }

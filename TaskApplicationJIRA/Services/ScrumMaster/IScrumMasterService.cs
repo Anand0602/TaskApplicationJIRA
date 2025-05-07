@@ -1,11 +1,10 @@
-﻿// Services/ScrumMaster/IScrumMasterService.cs
-using TaskApplicationJIRA.ViewModels;
+﻿using TaskApplicationJIRA.ViewModels;
 
 namespace TaskApplicationJIRA.Services.ScrumMaster
 {
     public interface IScrumMasterService
     {
         Task<ScrumMasterViewModel> GetDashboardAsync();
-        Task AssignTaskAsync(int taskId, int developerId);
+        Task<bool> AssignTaskAsync(int taskId, int developerId);  // Return bool for success/failure
     }
 }

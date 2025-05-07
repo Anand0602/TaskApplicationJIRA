@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace TaskApplicationJIRA.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialMigration : Migration
+    public partial class Final2 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -58,8 +58,8 @@ namespace TaskApplicationJIRA.Migrations
                     Username = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Role = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Password = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    CreatedBy = table.Column<int>(type: "int", nullable: false),
+                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedBy = table.Column<int>(type: "int", nullable: true),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedBy = table.Column<int>(type: "int", nullable: true),
                     UpdatedOn = table.Column<DateTime>(type: "datetime2", nullable: true),

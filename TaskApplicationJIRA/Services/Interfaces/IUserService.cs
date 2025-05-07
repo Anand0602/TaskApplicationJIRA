@@ -10,5 +10,8 @@ namespace TaskApplicationJIRA.Services.UserServices
         Task CreateUserAsync(User user);
         Task UpdateUserAsync(int id, User updatedUser);
         Task DeleteUserAsync(int id);
+
+         
+        Task<bool> ChangePasswordAsync(int userId, string currentPassword, string newPassword);
     }
 }

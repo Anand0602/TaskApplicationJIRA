@@ -204,7 +204,7 @@ namespace TaskApplicationJIRA.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserId"));
 
-                    b.Property<int>("CreatedBy")
+                    b.Property<int?>("CreatedBy")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedOn")
@@ -222,8 +222,7 @@ namespace TaskApplicationJIRA.Migrations
 
                     b.Property<string>("Password")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Role")
                         .IsRequired()

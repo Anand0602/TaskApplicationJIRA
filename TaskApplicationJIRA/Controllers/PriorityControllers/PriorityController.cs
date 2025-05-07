@@ -31,6 +31,7 @@ namespace TaskApplicationJIRA.Controllers.PriorityControllers
             if (ModelState.IsValid)
             {
                 await _priorityService.AddAsync(priority);
+                TempData["SuccessMessage"] = "Priority created successfully!";
                 return RedirectToAction("Index", "Admin");
             }
             return View(priority);
@@ -57,13 +58,14 @@ namespace TaskApplicationJIRA.Controllers.PriorityControllers
                 try
                 {
                     await _priorityService.UpdateAsync(priority);
+                    TempData["SuccessMessage"] = "Priority updated successfully!";
                 }
                 catch
                 {
                     if (!_priorityService.Exists(priority.PriorityId)) return NotFound();
                     throw;
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index", "Admin");
             }
             return View(priority);
         }
@@ -83,7 +85,8 @@ namespace TaskApplicationJIRA.Controllers.PriorityControllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             await _priorityService.DeleteAsync(id);
-            return RedirectToAction(nameof(Index));
+            TempData["SuccessMessage"] = "Priority deleted successfully!";
+            return RedirectToAction("Index", "Admin");
         }
     }
 }

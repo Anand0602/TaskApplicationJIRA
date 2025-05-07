@@ -4,81 +4,118 @@
     ViewData["Title"] = "Scrum Master Dashboard";
 }
 
-<h2>All Tasks</h2>
+<div class="container my-4">
+    <div class="card shadow-lg rounded">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <h4 class="mb-0">Scrum Master Dashboard</h4>
+        </div>
 
-<table class="table table-bordered">
-    <thead>
-        <tr>
-            <th>Title</th>
-            <th>Description</th>
-            <th>Category</th>
-            <th>Priority</th>
-            <th>Status</th>
-            <th>Due Date</th>
-            <th>Assign To</th>
-            <th>Image</th>
-            
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var task in Model.Tasks)
-        {
-            <tr>
-                <td>@task.Title</td>
-                <td>@task.Description</td>
-                <td>@task.CategoryName</td>
-                <td>@task.PriorityLevel</td>
-                <td>@task.Status</td>
-                <td>@task.DueDate?.ToString("yyyy-MM-dd")</td>
-                <td>
-                    <form asp-action="Assign" method="post" class="d-flex">
-                        <input type="hidden" name="taskId" value="@task.TaskId" />
+        <div class="card-body">
 
-                        @if (task.AssignedToUserId == null || task.AssignedToUserId == 0)
+            @if (TempData["Success"] != null)
+            {
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    @TempData["Success"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            }
+
+            <h5 class="mb-3">All Tasks</h5>
+
+            <div class="table-responsive">
+                <table class="table table-bordered align-middle text-center">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Title</th>
+                            <th>Description</th>
+                            <th>Category</th>
+                            <th>Priority</th>
+                            <th>Status</th>
+                            <th>Assign To</th>
+                            <th>Due Date</th>
+                            <th>Image</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var task in Model.Tasks)
                         {
-                            <select name="developerId" class="form-select me-1" required>
-                                <option value="" disabled selected>-- Select Developer --</option>
-                                @foreach (var dev in Model.Developers)
-                                {
-                                    <option value="@dev.UserId">@dev.Username</option>
-                                }
-                            </select>
-                            <button type="submit" class="btn btn-sm btn-primary">Assign</button>
+                            <tr>
+                                <td>@task.Title</td>
+                                <td>@task.Description</td>
+                                <td>@task.CategoryName</td>
+                                <td>
+                                    @{
+                                        var priorityRaw = task.PriorityLevel ?? "";
+                                        var priority = priorityRaw.Trim().ToLower();
+                                        var badgeClass = priority switch
+                                        {
+                                            "highest" => "bg-danger",
+                                            "high" => "bg-warning text-dark",
+                                            "medium" => "bg-primary",
+                                            "low" => "bg-info text-dark",
+                                            "lowest" => "bg-success",
+                                            _ => "bg-secondary"
+                                        };
+                                    }
+                                    <span class="badge @badgeClass text-uppercase">@priorityRaw</span>
+                                </td>
+
+
+                                <td>
+                                    <span class="badge @(task.Status == "Completed" ? "bg-success" : "bg-warning text-dark")">
+                                        @task.Status
+                                    </span>
+                                </td>
+                                <td>
+                                    @if (task.AssignedToUserId == null || task.AssignedToUserId == 0)
+                                    {
+                                        <form asp-action="Assign" method="post" class="d-flex gap-2">
+                                            <input type="hidden" name="taskId" value="@task.TaskId" />
+
+                                            <select name="developerId" class="form-select form-select-sm" required>
+                                                <option value="" disabled selected>-- Select Developer --</option>
+                                                @foreach (var dev in Model.Developers)
+                                                {
+                                                    <option value="@dev.UserId">@dev.Username</option>
+                                                }
+                                            </select>
+                                            <button type="submit" class="btn btn-sm btn-primary">Assign</button>
+                                        </form>
+                                    }
+                                    else
+                                    {
+                                        var assignedUser = Model.Developers.FirstOrDefault(u => u.UserId == task.AssignedToUserId);
+                                        <span class="badge bg-success">@assignedUser?.Username</span>
+                                    }
+                                </td>
+                                <td>@task.DueDate?.ToString("yyyy-MM-dd")</td>
+                                <td>
+                                    @if (!string.IsNullOrEmpty(task.ImageUrl))
+                                    {
+                                        <img src="@task.ImageUrl" width="50" class="img-thumbnail"
+                                             style="cursor:pointer"
+                                             data-bs-toggle="modal"
+                                             data-bs-target="#imageModal"
+                                             onclick="showImageModal('@task.ImageUrl', '@task.Title')" />
+                                    }
+                                </td>
+                            </tr>
                         }
+                    </tbody>
+                </table>
+            </div>
 
-                        else
-                        {
-                            var assignedUser = Model.Developers.FirstOrDefault(u => u.UserId == task.AssignedToUserId);
-                            <span class="form-control me-1">@assignedUser?.Username</span>
-                        }
-                    </form>
+        </div>
+    </div>
+</div>
 
-                </td>
-                <td>
-                    @if (!string.IsNullOrEmpty(task.ImageUrl))
-                    {
-                        <img src="@task.ImageUrl" width="50" style="cursor:pointer"
-                             class="img-thumbnail"
-                             data-bs-toggle="modal"
-                             data-bs-target="#imageModal"
-                             onclick="showImageModal('@task.ImageUrl', '@task.Title')" />
-                    }
-
-                </td>
-                
-            </tr>
-        }
-    </tbody>
-</table>
-
-
-
+<!-- Image Modal -->
 <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
+        <div class="modal-content shadow-lg">
+            <div class="modal-header bg-dark text-white">
                 <h5 class="modal-title" id="imageModalLabel">Task Image Preview</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body text-center">
                 <img id="modalImage" src="" class="img-fluid rounded shadow" alt="Task Image" />
@@ -87,47 +124,11 @@
     </div>
 </div>
 
-
-@* @section Scripts { *@
-@*     <script> *@
-@*         function showImageModal(imageUrl, taskTitle) { *@
-@*             document.getElementById('modalImage').src = imageUrl; *@
-@*             document.getElementById('imageModalLabel').textContent = taskTitle; *@
-@*         } *@
-@*     </script> *@
-@* } *@
-
-
 @section Scripts {
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.5.0/dist/sweetalert2.min.js"></script>
-
     <script>
         function showImageModal(imageUrl, taskTitle) {
             document.getElementById('modalImage').src = imageUrl;
             document.getElementById('imageModalLabel').textContent = taskTitle;
         }
-
-               document.addEventListener("DOMContentLoaded", function () {
-            @if (TempData["LoginSuccess"] != null)
-            {
-                    <text>
-                        Swal.fire({
-                            toast: true,
-                            position: 'top-end',
-                            icon: 'success',
-                            title: '@TempData["LoginSuccess"]',
-                            showConfirmButton: false,
-                            timer: 4000,
-                            timerProgressBar: true,
-                            background: '#f0f9eb',
-                            color: '#1b5e20',
-                            didOpen: (toast) => {
-                                toast.addEventListener('mouseenter', Swal.stopTimer)
-                                toast.addEventListener('mouseleave', Swal.resumeTimer)
-                            }
-                        });
-                    </text>
-            }
-        });
     </script>
 }
